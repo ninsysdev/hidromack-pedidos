@@ -1,11 +1,48 @@
 <template>
+    <nav class="navbar navbar-light bg-light fixed-bottom">
+      <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex">
+                <input 
+                  v-model="datoabuscar" 
+                  type="text" 
+                  name="campobuscar" 
+                  id="campobuscar" 
+                  class="form-control me-2" 
+                  placeholder="Datos a buscar" 
+                  aria-label="Search"
+                  onfocus="this.select();">
+                <button class="btn btn-primary" type="button" @click="listaProductos(tipobus)">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-12 mt-2">
+              <div class="btn-group" role="group" aria-label="Basic radio">
+                <input @click="parametroBusqueda(1)" type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio1">Des</label>
+
+                <input @click="parametroBusqueda(2)" type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio2">Cod</label>
+
+                <input @click="parametroBusqueda(3)" type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Ref</label>
+
+                <input @click="parametroBusqueda(4)" type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio4">Mac</label>
+            </div>
+            </div>
+          </div>
+      </div>
+    </nav>
     <div class="offline" v-if="!esonline">
       <i class="bi bi-exclamation-circle"></i> Sin conexion a internet...
     </div>
     <div class="container">
       <div class="input-group">
         <div class="col-6">
-          <h6 style="margin-top: 4px;">LISTA DE PRODUCTOS</h6>
+          <h6 style="margin-top: 4px;">ARCHVIO DE PRODUCTOS</h6>
         </div>
         <div class="col-6" style="text-align: right; margin-top: 3px;">
             <CatalogoExcel :todos-productos="todosProductos"/>
@@ -13,29 +50,7 @@
             <CatalogoPDF :todos-productos="todosProductos"/>
         </div>
       </div>
-      <div class="input-group p-2">
-          <input v-model="datoabuscar" type="text" name="campobuscar" id="campobuscar" class="form-control bg-light border-0 small" placeholder="Datos a buscar"
-              aria-label="Search" aria-describedby="basic-addon2" onfocus="this.select();">  
-          <div class="input-group-append">
-              <button class="btn btn-primary" type="button" @click="listaProductos(tipobus)">
-                  <i class="bi bi-binoculars-fill"></i>
-              </button>
-          </div>
-    </div>
-    <div class="btn-group" role="group" aria-label="Basic radio">
-      <input @click="parametroBusqueda(1)" type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio1">Des</label>
-
-      <input @click="parametroBusqueda(2)" type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
-      <label class="btn btn-outline-primary" for="btnradio2">Cod</label>
-
-      <input @click="parametroBusqueda(3)" type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio3">Ref</label>
-
-      <input @click="parametroBusqueda(4)" type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio4">Mac</label>
-    </div>
-    <div class="mt-2">
+    <div class="mt-2 mb-4">
       <div v-for="producto in productos" :key="producto.codprod" class="card mb-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -63,13 +78,6 @@
                     </div>
                     </div>
                 </div>  
-        <nav v-if="cantidadPaginas > 1 && cantidadPaginas <= 2" aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" @click="getPaginaPrevia()"><i class="fa  fa-chevron-circle-left"></i></a></li>
-            <li v-for="pagina in  totalPaginas()" :key="pagina" class="page-item" :class="esActiva(pagina)"><a class="page-link" @click="getDataPagina(pagina)" >{{ pagina }}</a></li>
-            <li class="page-item"><a class="page-link" @click="getPaginaProxima()"><i class="fa  fa-chevron-circle-right"></i></a></li>
-          </ul>
-        </nav>
       </div>
       <!-- Modal -->
       <div class="modal fade modal-fullscreen" id="ModalActivos" tabindex="-1" aria-labelledby="ModalActivosLabel" aria-hidden="true">
@@ -185,6 +193,7 @@
 
   function nuevodoPedido(){
     if(parseInt(cantidad.value) <= parseInt(datospedido.value.Exinten)){
+      /////////////////let tienePedido = pedidotemp.value.filter(producto => datospedido.value.CodProd.toLowerCase().includes(datoabuscar.value.toLowerCase()))
         pedidotemp.value.push({
             codvend : codvend.value,
             codclie : '',

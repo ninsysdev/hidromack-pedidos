@@ -3,10 +3,13 @@
        <i class="bi bi-exclamation-circle"></i> Sin conexion a internet...
     </div>
     <div class="container mt-10">
-        <UltimasFacturas :ultfact="ultfact" :usuario="usuario" :vendedor="vendedor"/>
+        <UltimasFacturas :ultfact="ultfact" :usuario="usuario" :vendedor="vendedor" :sincronizado="fechaRep"/>
     </div>
-    <div v-if="sincroniza" class="d-grid gap-2">
-        <button class="btn btn-primary btn-block" type="button" disabled>
+    <div @click="sincronizar()" v-if="!sincroniza" class="container mt-2 d-grid gap-2">
+        <button class="btn btn-primary"> SINCRONIZAR AHORA</button>
+    </div>
+    <div v-if="sincroniza" class="d-grid gap-2 mt-2">
+        <button class="btn btn-primary" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             SINCRONIZANDO...
         </button>
@@ -40,6 +43,7 @@
     const ultfact = ref([])
     let usuario = ref('')
     let vendedor = ref('')
+    let fechaRep = ref('')
     let esonline = ref(false)
     let sincroniza = ref(false)
 
@@ -50,8 +54,8 @@
             usuario.value = datoslocales.spx_use_p;
             vendedor.value = datoslocales.spx_use_v; 
 
-            let fechaRep = JSON.parse(localStorage.getItem('spx_fechareplica'));
-            await fechaReplica.fetchFechaReplica(store.urlPpal,store.headRequest(),fechaRep)
+            fechaRep.value = JSON.parse(localStorage.getItem('spx_fechareplica'));
+            await fechaReplica.fetchFechaReplica(store.urlPpal,store.headRequest(),fechaRep.value)
             if(fechaData.value.updated=='1'){
                 localStorage.removeItem('spx_fechareplica')
                 localStorage.setItem('spx_fechareplica',JSON.stringify(fechaData.value.fechareplica.toString()))
@@ -70,6 +74,7 @@
         await pedidosservice.fetchPedidosPendientes(store.urlPpal,store.headRequest(),vendedor.value);
         await pedidosguardos.fetchPedidosGuardados(store.urlPpal,store.headRequest(),vendedor.value);
         await ultimospedidos.fetchPedidos(store.urlPpal,store.headRequest(),vendedor.value);
+        fechaRep.value = fechaData.value.fechareplica.toString()
         sincroniza.value = false
     })
 
