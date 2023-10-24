@@ -194,25 +194,28 @@
   function nuevodoPedido(){
     if(parseInt(cantidad.value) <= parseInt(datospedido.value.Exinten)){
       /////////////////let tienePedido = pedidotemp.value.filter(producto => datospedido.value.CodProd.toLowerCase().includes(datoabuscar.value.toLowerCase()))
+      if(pedidotemp.value.some(pedidotemp => pedidotemp.codprod == datospedido.value.CodProd)){
+        swal("Codigo ya existe en Pedido");
+      } else{
         pedidotemp.value.push({
-            codvend : codvend.value,
-            codclie : '',
-            cliente : '',
-            codprod : datospedido.value.CodProd,
-            descrip : datospedido.value.Descrip,
-            cantidad : cantidad.value,
-            precio : datospedido.value.Precio,
-            comentario : '', //comentario.value,
-            conexion : '', //conexion.value,
-            deposito : datospedido.value.Deposito 
-        })
-        localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
-        cantire.value = pedidotemp.value.length
+              codvend : codvend.value,
+              codclie : '',
+              cliente : '',
+              codprod : datospedido.value.CodProd,
+              descrip : datospedido.value.Descrip,
+              cantidad : cantidad.value,
+              precio : datospedido.value.Precio,
+              comentario : '', //comentario.value,
+              conexion : '', //conexion.value,
+              deposito : datospedido.value.Deposito 
+          })
+          localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+          cantire.value = pedidotemp.value.length
       }
-      else{
+    }else{
         swal("La cantidad es superior a la existencia");
-      }
-        document.getElementById("campobuscar").focus();
+    }
+    document.getElementById("campobuscar").focus();
   }
       
   function editarPedido(producto){

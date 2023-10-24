@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 export const useGlobalStore = defineStore('storePpal',{
     state : () =>{
         return {
-            dev : 'http://localhost:8081/apihidromack/public/api/',
-            urlPpal : 'https://apihidromack.geincca.com/api/',
+            urlPpal : 'http://localhost:8081/apihidromack/public/api/',
+            onLine : 'https://apihidromack.geincca.com/api/',
             deposito : '800',
             ventasOficina : 'VEN000'
         }
