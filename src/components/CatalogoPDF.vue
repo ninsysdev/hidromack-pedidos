@@ -46,6 +46,10 @@
           doc.text(170, linea, props.todosProductos[i]['Unidad']);
           //doc.text(180, linea, this.todosProductos[0]['Precio'],{align: 'right'});
           doc.text( props.todosProductos[i]['Precio'], 195, linea, { align: "right" });
+          if (props.todosProductos[i]['Descrip2'] != ""){
+            linea+=3
+            doc.text(45, linea, props.todosProductos[i]['Descrip2']);
+          }
           linea+=2
           doc.line(10, linea, 200, linea);
           linea+=4

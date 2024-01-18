@@ -7,6 +7,7 @@
     </div>
     <div @click="sincronizar()" v-if="!sincroniza" class="container mt-2 d-grid gap-2">
         <button class="btn btn-primary"> SINCRONIZAR AHORA</button>
+        <p style="font-size: small;">{{ version }}</p>
     </div>
     <div v-if="sincroniza" class="d-grid gap-2 mt-2">
         <button class="btn btn-primary" type="button" disabled>
@@ -14,6 +15,7 @@
             SINCRONIZANDO...
         </button>
     </div>
+    
 </template>
 
 <script setup>
@@ -39,6 +41,8 @@
     const ultimospedidos = new UltimosPedidos()
 
     import UltimasFacturas from '@/components/UltimasFacturas.vue'
+
+    let version = ref("v 3.33");
 
     const ultfact = ref([])
     let usuario = ref('')
@@ -74,8 +78,8 @@
         await pedidosservice.fetchPedidosPendientes(store.urlPpal,store.headRequest(),vendedor.value);
         await pedidosguardos.fetchPedidosGuardados(store.urlPpal,store.headRequest(),vendedor.value);
         await ultimospedidos.fetchPedidos(store.urlPpal,store.headRequest(),vendedor.value);
-        fechaRep.value = fechaData.value.fechareplica.toString()
-        sincroniza.value = false
+        fechaRep.value = fechaData.value.fechareplica.toString();
+        sincroniza.value = false;
     })
 
     const actualizar = ( async ()=>{

@@ -61,7 +61,15 @@ const routes = [
     meta : {
       requireAuth : true
     }
-  }
+  },
+  {
+    path : '/miscuentasporcobrar',
+    name : 'miscuentasporcobrar',
+    component: () => import(/* webpackChunkName: "miscuentasporcobrar" */ '../views/MisCuentasView.vue'),
+    meta : {
+      requireAuth : true
+    }
+  },
 ]
 
 const router = createRouter({

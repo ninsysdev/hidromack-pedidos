@@ -19,6 +19,10 @@
             <router-link style="text-decoration: none" :to="{ name : 'mispedidos' }"><i class="bi bi-send-fill"></i> Pedidos Enviados</router-link>   
           </li>
           <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
+          <li>
+            <router-link style="text-decoration: none" :to="{ name : 'miscuentasporcobrar' }"><i class="bi bi-calculator-fill"></i> Cuentas por Cobrar</router-link>   
+          </li>
+          <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
           <li   v-if="loged">
               <a href="#" style="text-decoration: none" @click="logOut" ><i class="bi bi-x-square-fill"></i> Cerrar Sesion</a> 
           </li>
@@ -40,7 +44,12 @@
     localStorage.removeItem('spx_factorbcv')
     localStorage.removeItem('spx_fechareplica')
     localStorage.removeItem('spx_mydata')
+    localStorage.removeItem('spx_clientlist')
+    localStorage.removeItem('spx_priceslist')
     localStorage.removeItem('spx_lastdoc')
+    localStorage.removeItem('spx_comentario')
+    localStorage.removeItem('spx_summarycxc')
+
     location.reload()
   })
 
