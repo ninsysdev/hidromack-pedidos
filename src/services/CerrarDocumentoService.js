@@ -22,7 +22,7 @@ class CerrarDocumentoService {
 
                 let response = await res.json()
                 this.respuesta.value = await response
-                console.log(this.respuesta.value)
+                //console.log(this.respuesta.value)
             }
             catch(error){
                 console.log(error)

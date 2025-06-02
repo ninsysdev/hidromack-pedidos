@@ -22,7 +22,7 @@
                                         <label for="floatingPassword">Password</label>
                                       </div>   
                                       <div class="form-floating d-grid gap-2">
-                                         <button type="submit" class="btn btn-primary btn-user btn-block">INGRESAR</button>
+                                         <button type="submit" :class="'btn btn-'+store.basecolor+' btn-user btn-block'">INGRESAR</button>
                                       </div>
                                       <hr>
                                     </form>
@@ -54,13 +54,14 @@
 <script setup>
     import { useRouter } from 'vue-router'
     import { useGlobalStore } from '@/store/global'
-    import { onMounted,ref } from 'vue';     
+    import { onMounted,ref,inject } from 'vue';     
     import LoginService from '@/services/LoginService'
 
     const router = useRouter()
     const store = useGlobalStore()
     const datalogin = new LoginService()
     const responselogin = datalogin.getRespuesta()
+	const swal = inject('$swal')
     
     const esonline = ref(false)
     const usuario = ref('')
@@ -79,18 +80,16 @@
                 spx_use_p : responselogin.value.nombre,
                 spx_use_v : responselogin.value.codvend,
             }  
-            let spx_factorbcv = 0;
             let spx_comentario = '';
             let spx_fechareplica = '2000-01-01 00:00:00';
             localStorage.setItem('spx_localdata',JSON.stringify(spx_localdata)) 
-            localStorage.setItem('spx_factorbcv',JSON.stringify(spx_factorbcv))
             localStorage.setItem('spx_fechareplica',JSON.stringify(spx_fechareplica))
             localStorage.setItem('spx_comentario',JSON.stringify(spx_comentario))
              await router.push('/')
              location.reload()
         }
         else{
-            console.log('trash')
+            swal(responselogin.value.message);
         }
     } 
 </script>

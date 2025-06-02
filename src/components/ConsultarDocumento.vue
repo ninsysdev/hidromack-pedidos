@@ -72,24 +72,18 @@
     import { useGlobalStore } from '@/store/global';
 
     const sincroniza = ref(false)
-
     const route = useRouter() 
     const swal = inject('$swal')
-
     const consultarDocumento = new consultardocumentoService()
     const documentoData = consultarDocumento.getDocumento()
-
     const borrarDocumento = new BorrarDocumentoService()
     const borrarDocumentoRes = borrarDocumento.getRespuesta()
-
     const pedidosguardos = new PedidosGuardadosService()
-
     const store = useGlobalStore()
     const formulario = ref('')
     const vendedor = ref('')
     const esonline = ref(false)
     const pedidotemp = ref([])
-
     const props = defineProps({
         codigo : Number,
         guardado : Number,
@@ -97,6 +91,7 @@
         nomclie : String,
         totalmonto : Number
     })
+    const esesp=ref('');
 
     onMounted( async ()=>{
         esonline.value=navigator.onLine
@@ -116,6 +111,8 @@
             await consultarDocumento.fetchConsultarDocumento(store.urlPpal,store.headRequest(),props.codigo)
             sincroniza.value = false
         }
+        esesp.value = documentoData.value[0].conexion;
+        console.log('esesp',esesp.value)
     })
 
     const borrarPedido = ( async ()=>{
@@ -143,19 +140,37 @@
 
     const editarPedido = ( async ()=>{
         await pedidoTemporal()
-        route.push({
-            name : 'pedidopendiente',
-            params : {
-                codclie : props.codclie,
-                descrip : props.nomclie,
-                reeditar : props.codigo
-            }
-        })
+        if(esesp.value == 'Esp'){     
+            route.push({
+                name : 'pedidoespecial',
+                params : {
+                    codclie : props.codclie,
+                    descrip : props.nomclie,
+                    reeditar : props.codigo
+                }
+            })       
+        }
+        else{
+            route.push({
+                name : 'pedidopendiente',
+                params : {
+                    codclie : props.codclie,
+                    descrip : props.nomclie,
+                    reeditar : props.codigo
+                }
+            })
+        }
     })
 
     const pedidoTemporal = ( async ()=>{
         let temcomenta = ''
-        localStorage.removeItem('spx_pedidotemp')
+        if(esesp.value == 'Esp'){
+            localStorage.removeItem('spx_pedido_esp')
+        }
+        else{
+            localStorage.removeItem('spx_pedidotemp')
+        }
+
         documentoData.value.forEach((item)=>{
             pedidotemp.value.push({
               codvend : vendedor.value,
@@ -171,7 +186,13 @@
           })
           temcomenta = item.comentario
         })
-        localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+        if(esesp.value == 'Esp'){
+            localStorage.setItem('spx_pedido_esp',JSON.stringify(pedidotemp.value))
+        }
+        else{
+            localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+        }
+        
         localStorage.setItem('spx_comentario',JSON.stringify(temcomenta))
     })
 </script>

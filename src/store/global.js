@@ -4,8 +4,9 @@ export const useGlobalStore = defineStore('storePpal',{
     state : () =>{
         return {
             dev : 'http://localhost:8081/apihidromack/public/api/',
-            urlPpal : 'https://apihidromack.geincca.com/api/',
+            urlPpal : 'https://apihidromack.spxapp.com/api/',
             deposito : '800',
+            basecolor : 'warning',
             ventasOficina : 'VEN000'
         }
     },

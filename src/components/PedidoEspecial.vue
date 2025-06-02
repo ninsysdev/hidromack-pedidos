@@ -8,7 +8,7 @@
                 <table class="table table-sm">
                     <tbody>
                         <tr v-for="(item,index) in pedidotemp" :key="index">
-                            <td><small>{{ item.codprod }} - {{ item.descrip }}<br>
+                            <td><small><i class="bg-success">{{ item.codprod }}</i> - {{ item.descrip }}<br>
                             Ref: {{ item.referen }}<br>    
                             Cant: {{ item.cantidad }} - Precio: {{ item.precio }}</small></td>
                             <td style="text-align: right;"><small>{{ filters.formatNum(item.cantidad*item.precio)  }}</small></td>
@@ -40,8 +40,8 @@
             <div v-else>
                 <div v-if="esonline" class="d-grid gap-2">
                 <div v-if="cliente.codclie!=''" class="d-grid gap-2">
-                    <button @click="totalizarpedido()" :class="'btn btn-'+store.basecolor+' mb-1 btn-block'"  ><i class="bi bi-send-fill"></i> ENVIAR PARA PROCESAR</button>
-                    <button @click="guardarPedido()" style="color: black;" class="btn btn-warning mb-1 btn-block"  ><i class="bi bi-folder-fill"></i> GUARDAR EN MIS ARCHIVOS</button>
+                    <button @click="totalizarpedido()" class="btn btn-success mb-1 btn-block"  ><i class="bi bi-send-fill"></i> ENVIAR PARA PROCESAR</button>
+                    <button @click="guardarPedido()" style="color: black;" class="btn btn-success mb-1 btn-block"  ><i class="bi bi-folder-fill"></i> GUARDAR EN MIS ARCHIVOS</button>
                 </div>              
                 </div>
                 <div class="d-grid gap-2">
@@ -81,14 +81,12 @@
     import GuardarDocumentoService from '@/services/GuardarDocumentoService';
     import BorrarDocumentoService from '@/services/BorrarDocumentoService';
     import PedidosGuardadosService from '@/services/PedidosGuardadosService'
-    // import SendTelegramService from '@/services/SendTelegramService'
     import PedidosService from '@/services/PedidosService';
 
     const swal = inject('$swal')
 
     const store = useGlobalStore()
     const cerrardocumento = new CerrarDocumentoService()
-    // const sendtelegram = new SendTelegramService();
     const documentoresp = cerrardocumento.getRespuesta()
     const pedidosservice = new PedidosService()
 
@@ -136,7 +134,7 @@
                 pedidotemp.value[i].codclie = cliente.value.codclie
                 pedidotemp.value[i].cliente = cliente.value.descrip
             }
-            localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+            localStorage.setItem('spx_pedido_esp',JSON.stringify(pedidotemp.value))
          }
          else{
             await getPedidotemp()
@@ -155,7 +153,7 @@
     })
   
     const getPedidotemp = ( async ()=>{
-            pedidotemp.value = JSON.parse(localStorage.getItem('spx_pedidotemp'))
+            pedidotemp.value = JSON.parse(localStorage.getItem('spx_pedido_esp'))
             if(pedidotemp.value){
                 cantire.value = pedidotemp.value.length;
                 await calculatotal()
@@ -174,13 +172,13 @@
     
     const borraoitem=( async (iditem)=>{
         pedidotemp.value.splice(iditem,1)
-        localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+        localStorage.setItem('spx_pedido_esp',JSON.stringify(pedidotemp.value))
         cantire.value = pedidotemp.value.length
         await calculatotal()
     })
 
     const borrarPedido = (()=>{
-        localStorage.removeItem('spx_pedidotemp')
+        localStorage.removeItem('spx_pedido_esp')
         localStorage.setItem('spx_comentario',JSON.stringify(''))
         cantire.value = 0;
     })
@@ -196,12 +194,20 @@
 
     const editarcantidad=( async ()=>{
         pedidotemp.value[editaitem.value.iditem].cantidad = editaitem.value.cantidad
-        localStorage.setItem('spx_pedidotemp',JSON.stringify(pedidotemp.value))
+        localStorage.setItem('spx_pedido_esp',JSON.stringify(pedidotemp.value))
         cantire.value = pedidotemp.value.length
         await calculatotal()
     })
 
     const totalizarpedido = ( async ()=>{
+        if(totalre.value < 300){
+            swal({
+                icon: 'warning',
+                title: 'Pedido Incompleto',
+                text: 'El total del pedido debe ser mayor o igual a $300.00',
+            })
+            return
+        }
         sincroniza.value = true
         await updateComentario()
 
@@ -226,7 +232,7 @@
             await cerrardocumento.fetchCerrarDocumento(store.urlPpal,store.headRequest(),pedido91);
         }
         if(documentoresp.value.response == 'ok'){
-            localStorage.removeItem('spx_pedidotemp')
+            localStorage.removeItem('spx_pedido_esp')
                 pedidotemp.value = []
                 cantire.value = 0;
                 await pedidosservice.fetchPedidosPendientes(store.urlPpal,store.headRequest(),vendedor.value);
@@ -269,7 +275,7 @@
         await updateComentario()
         await guardardocumento.fetchGuardarDocumento(store.urlPpal,store.headRequest(),pedidotemp.value);
         if(documentoguardadoresp.value.response == 'ok'){
-            localStorage.removeItem('spx_pedidotemp')
+            localStorage.removeItem('spx_pedido_esp')
                 pedidotemp.value = []
                 cantire.value = 0;
                 await pedidosguardos.fetchPedidosGuardados(store.urlPpal,store.headRequest(),vendedor.value);

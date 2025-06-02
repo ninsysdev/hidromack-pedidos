@@ -1,6 +1,6 @@
 <template>
     <!-- ListaPrecios/ -->
-    <CatalogoProductos/>
+    <CatalogoProductos />
 </template>
 <script setup>
     //import ListaPrecios from '@/components/ListaPrecios.vue';

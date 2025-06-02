@@ -2,29 +2,27 @@
     <div class="offline" v-if="!esonline">
         <i class="bi bi-exclamation-circle"></i> Sin conexion a internet...
     </div>
-    <nav class="navbar navbar-light bg-light fixed-bottom">
-    <div class="container-fluid">
+    <div class="container-fluid sticky-top p-2" style="top: 56px;background-color: whitesmoke;">
       <div class="row">
         <div class="col-12">
-            <h3 class="text-primary">Total por cobrar : <b>{{ filters.formatNum(totalcxc) }}</b></h3>
           <div class="d-flex">
             <input v-model="datoabuscar" type="text" name="campobuscar" id="campobuscar" class="form-control me-2"
               placeholder="Datos a buscar" aria-label="Search">
-            <button class="btn btn-primary" type="button" @click="getcuentas()">
+            <button :class="'btn btn-'+store.basecolor" type="button" @click="getcuentas()">
               <i class="bi bi-search"></i>
             </button>
           </div>
+          <h4 class="mt-2">Total por cobrar : {{ filters.formatNum(totalcxc) }}</h4>
         </div>
       </div>
     </div>
-  </nav>
     <div class="container">
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div v-for="cuenta in misCuentas" :key="cuenta.codclie" >
                 <ul class="list-group list-group-flush accordion-item" v-if="cuenta.escxc>0">
-                    <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center" style="font-size: small;" data-bs-toggle="collapse" :data-bs-target="'#'+cuenta.codclie" aria-expanded="false">
+                    <li :class="'list-group-item list-group-item-'+store.basecolor+' d-flex justify-content-between align-items-center'" style="font-size: small;" data-bs-toggle="collapse" :data-bs-target="'#'+cuenta.codclie" aria-expanded="false">
                         {{ cuenta.descrip }} <br> {{ cuenta.ID3 }}
-                        <span class="badge bg-primary rounded-pill">{{ cuenta.totalcxc }}</span>
+                        <span :class="'badge bg-'+store.basecolor+' rounded-pill'">{{ filters.formatNum(cuenta.totalcxc) }}</span>
                     </li>
                     <div :id="cuenta.codclie" class="accordion-collapse collapse">
                         <div class="accordion-body">
@@ -48,13 +46,20 @@
                 </ul>
             </div>
             <hr>
+            <br>
+            <br>
             <br><br>
+            <br>
+            <hr>
         </div>
     </div>
 </template>
   
 <script setup>
     import { onMounted,ref } from 'vue';
+    import { useGlobalStore } from '@/store/global'; 
+    const store = useGlobalStore();
+
     const esonline = ref(false);
     const misClientes = ref([]);
     const misCuentas = ref([]);

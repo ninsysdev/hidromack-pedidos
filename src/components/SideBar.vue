@@ -7,24 +7,32 @@
   <div class="offcanvas-body">
     <ul class="navbar-nav">
           <li style="text-align: center;">
-            <img src="img/users/user.png" class="rounded-circle mb-2" alt="..." style="width: 27%;"> 
+            <img src="/img/users/user.png" alt="..." style="width: 100%;"> 
             <p>{{ userl }}</p>
           </li>
           <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
           <li>
-            <router-link style="text-decoration: none" :to="{ name : 'mispedidospendientes' }"><i class="bi bi-cloud-fill"></i> Archivos Guardados</router-link>   
+            <router-link style="text-decoration: none;color: black" :to="{ name : 'mispedidospendientes' }"><i class="bi bi-cloud-fill"></i> Archivos Guardados</router-link>   
           </li>
           <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
           <li>
-            <router-link style="text-decoration: none" :to="{ name : 'mispedidos' }"><i class="bi bi-send-fill"></i> Pedidos Enviados</router-link>   
+            <router-link style="text-decoration: none;color: black" :to="{ name : 'mispedidos' }"><i class="bi bi-send-fill"></i> Pedidos Enviados</router-link>   
           </li>
           <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
           <li>
-            <router-link style="text-decoration: none" :to="{ name : 'miscuentasporcobrar' }"><i class="bi bi-calculator-fill"></i> Cuentas por Cobrar</router-link>   
+            <router-link style="text-decoration: none;color: black" :to="{ name : 'miscuentasporcobrar' }"><i class="bi bi-calculator-fill"></i> Cuentas por Cobrar</router-link>   
+          </li>
+          <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
+          <li>
+            <router-link style="text-decoration: none;color: black" :to="{ name : 'vercatalogopdf' }"><i class="bi bi-file-earmark-pdf-fill"></i> Catálogo PDF</router-link>   
+          </li>
+          <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
+          <li>
+            <router-link style="text-decoration: none;color: black" :to="{ name : 'misventas' }"><i class="bi bi-receipt"></i> Consulta de Ventas</router-link>   
           </li>
           <li class="mt-2 mb-2"><hr class="dropdown-divider bg-light" /></li>
           <li   v-if="loged">
-              <a href="#" style="text-decoration: none" @click="logOut" ><i class="bi bi-x-square-fill"></i> Cerrar Sesion</a> 
+              <a href="#" style="text-decoration: none;color: black" @click="logOut" ><i class="bi bi-x-square-fill"></i> Cerrar Sesion</a> 
           </li>
         </ul>
   </div>
@@ -41,7 +49,7 @@
 
   const logOut = ( async ()=>{
     localStorage.removeItem('spx_localdata')
-    localStorage.removeItem('spx_factorbcv')
+    localStorage.removeItem('spx_find')
     localStorage.removeItem('spx_fechareplica')
     localStorage.removeItem('spx_mydata')
     localStorage.removeItem('spx_clientlist')

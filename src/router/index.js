@@ -31,6 +31,14 @@ const routes = [
     }
   },
   {
+    path : '/pedidoespecial/:codclie/:descrip/:reeditar',
+    name : 'pedidoespecial',
+    component: () => import(/* webpackChunkName: "pedidopendiente" */ '../views/PedidoEspecialView.vue'),
+    meta : {
+      requireAuth : true
+    }
+  },
+  {
     path : '/clientes',
     name : 'clientes',
     component: () => import(/* webpackChunkName: "clientes" */ '../views/ClientesView.vue'),
@@ -66,6 +74,30 @@ const routes = [
     path : '/miscuentasporcobrar',
     name : 'miscuentasporcobrar',
     component: () => import(/* webpackChunkName: "miscuentasporcobrar" */ '../views/MisCuentasView.vue'),
+    meta : {
+      requireAuth : true
+    }
+  },
+  {
+    path : '/listaespecial',
+    name : 'listaespecial',
+    component: () => import(/* webpackChunkName: "listaproductos" */ '../views/ListaEspecialView.vue'),
+    meta : {
+      requireAuth : true
+    }
+  },
+  {
+    path : '/vercatalogopdf',
+    name : 'vercatalogopdf',
+    component: () => import(/* webpackChunkName: "listaproductos" */ '../views/CatalogoPDFView.vue'),
+    meta : {
+      requireAuth : true
+    }
+  },
+  {
+    path : '/misventas',
+    name : 'misventas',
+    component: () => import(/* webpackChunkName: "misventas" */ '../views/MisVentasView.vue'),
     meta : {
       requireAuth : true
     }

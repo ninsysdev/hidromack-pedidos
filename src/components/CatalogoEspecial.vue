@@ -1,8 +1,11 @@
 <template>
   <div class="container-fluid sticky-top p-2" style="top: 56px; background-color: whitesmoke;">
     <div class="input-group mb-2">
-      <div class="col-6" style="background-color:aqua;">
+      <!-- div v-if="props.lista == 'Normal'" class="col-6" style="background-color:aqua;">
         <h6 class="mt-1 mb-1 text-center" style="font-size: large;">LISTA GENERAL</h6>
+      </div -->
+      <div class="col-6 bg-success">
+        <h6 class="mt-1 mb-1 text-center" style="font-size: large;">LISTA LIQUIDACION</h6>
       </div>
       <div class="col-6 mt-1 mb-1" style="text-align: right">
         <CatalogoExcel :todos-productos="todosProductos" />
@@ -56,6 +59,8 @@
           <div :id="producto.CodProd" class="carousel carousel-dark" data-bs-ride="carousel" data-bs-interval="20000">
             <div v-for="(imagen,index) in producto.img" :key="index" class="carousel-inner">
               <div v-if="index == 0" class="carousel-item active" style="text-align: center;">
+                <!-- img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" alt="..." width="300" height="300">
+                <img src="/img/users/logo2.png" alt="..." width="268" hspace="16" height="268" vspace="16" -->
                 <div style="position:relative">
                   <img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
                   <div style="position:absolute; bottom:0; right:0; padding: 5%;">
@@ -130,9 +135,10 @@ import { onMounted, ref, inject } from 'vue'
 import CatalogoPDF from '@/components/CatalogoPDF.vue'
 import CatalogoExcel from './CatalogoExcel.vue';
 import { useGlobalStore } from '@/store/global'; 
-
 const store = useGlobalStore();
+
 const swal = inject('$swal')
+
 const esonline = ref(false)
 const datoabuscar = ref('')
 const todosProductos = ref([])
@@ -148,12 +154,12 @@ const tipobus = ref(2)
 
 onMounted(() => {
   esonline.value = navigator.onLine
-  todosProductos.value = JSON.parse(localStorage.getItem('spx_priceslist'));
+  todosProductos.value = JSON.parse(localStorage.getItem('spx_speciallist'));
   let datoslocales = JSON.parse(localStorage.getItem('spx_localdata'));
   codvend.value = datoslocales.spx_use_v;
-  let pedidotemporal = JSON.parse(localStorage.getItem('spx_pedidotemp'));
+  let pedidotemporal = JSON.parse(localStorage.getItem('spx_pedido_esp'));
   if (pedidotemporal) {
-    pedidotemp.value = JSON.parse(localStorage.getItem('spx_pedidotemp'))
+    pedidotemp.value = JSON.parse(localStorage.getItem('spx_pedido_esp'))
     cantire.value = pedidotemp.value.length
   }
   let spx_find = JSON.parse(localStorage.getItem('spx_find'));
@@ -214,10 +220,10 @@ function nuevodoPedido() {
         cantidad: cantidad.value,
         precio: datospedido.value.Precio,
         comentario: '', //comentario.value,
-        conexion: '', //conexion.value,
+        conexion: 'Esp', //conexion.value,
         deposito: datospedido.value.Deposito
       });
-      localStorage.setItem('spx_pedidotemp', JSON.stringify(pedidotemp.value))
+      localStorage.setItem('spx_pedido_esp', JSON.stringify(pedidotemp.value))
       cantire.value = pedidotemp.value.length
     }
   } else {
@@ -239,12 +245,15 @@ function editarPedido(producto) {
     tieneImagen.value = false;
     datosImagen.value = []
   }
+
 }
 
 function tienepedido(codigo) {
   let cantidadpedida = 0
   if (cantire.value > 0) {
+    //console.log(codigo)
     for (let i = 0; i <= cantire.value - 1; i++) {
+      //console.log(this.pedidotemp[i].codprod)
       if (pedidotemp.value[i].codprod == codigo) {
         cantidadpedida = cantidadpedida + Number(pedidotemp.value[i].cantidad)
       }

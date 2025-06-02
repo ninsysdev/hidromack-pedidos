@@ -6,11 +6,11 @@
         <UltimasFacturas :ultfact="ultfact" :usuario="usuario" :vendedor="vendedor" :sincronizado="fechaRep"/>
     </div>
     <div @click="sincronizar()" v-if="!sincroniza" class="container mt-2 d-grid gap-2">
-        <button class="btn btn-primary"> SINCRONIZAR AHORA</button>
+        <button :class="'btn btn-'+store.basecolor"> SINCRONIZAR AHORA</button>
         <p style="font-size: small;">{{ version }}</p>
     </div>
     <div v-if="sincroniza" class="d-grid gap-2 mt-2">
-        <button class="btn btn-primary" type="button" disabled>
+        <button :class="'btn btn-'+store.basecolor" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             SINCRONIZANDO...
         </button>
@@ -28,6 +28,7 @@
     import PedidosService from '@/services/PedidosService'
     import PedidosGuardadosService from '@/services/PedidosGuardadosService'
     import UltimosPedidos from '@/services/UltimosPedidos'
+    import ListaEspecialService from '@/services/ListaEspecialService';
 
     const store = useGlobalStore()
     const fechaReplica = new FechaReplicaService()
@@ -39,10 +40,11 @@
     const pedidosservice = new PedidosService()
     const pedidosguardos = new PedidosGuardadosService()
     const ultimospedidos = new UltimosPedidos()
+    const listaespecial = new ListaEspecialService()
 
     import UltimasFacturas from '@/components/UltimasFacturas.vue'
 
-    let version = ref("v 3.33");
+    let version = ref("v 3.45");
 
     const ultfact = ref([])
     let usuario = ref('')
@@ -72,12 +74,14 @@
     
     const sincronizar = ( async () =>{
         sincroniza.value = true
+        localStorage.setItem('spx_find',JSON.stringify({ tipo : 2, filtro : '' }));
         await ultfacservice.fetchFacturas(store.urlPpal,store.headRequest(),vendedor.value);
         await productosservice.fetchProductos(store.urlPpal,store.headRequest());
         await clientesservice.fetchClientes(store.urlPpal,store.headRequest(),vendedor.value);
         await pedidosservice.fetchPedidosPendientes(store.urlPpal,store.headRequest(),vendedor.value);
         await pedidosguardos.fetchPedidosGuardados(store.urlPpal,store.headRequest(),vendedor.value);
         await ultimospedidos.fetchPedidos(store.urlPpal,store.headRequest(),vendedor.value);
+        await listaespecial.fetchListaEspecial(store.urlPpal,store.headRequest());
         fechaRep.value = fechaData.value.fechareplica.toString();
         sincroniza.value = false;
     })

@@ -6,8 +6,8 @@
       <div class="container mt-3">
           <i class="bi bi-send-fill"></i> - PEDIDOS ENVIADOS
           <ul  class="list-group">
-            <li  v-for="documento in documentosEnv" :key="documento.codigo" class="list-group-item d-flex justify-content-between align-items-center bg-light">
-              <router-link style="font-size: smaller; text-decoration: none;" :to="{name:'consultardocumento',params:{
+            <li  v-for="documento in documentosEnv" :key="documento.codigo" :class="'list-group-item list-group-item-'+store.basecolor+' d-flex justify-content-between align-items-center'">          
+              <router-link style="font-size: smaller; text-decoration: none;color:black" :to="{name:'consultardocumento',params:{
                         codigo : documento.codigo,
                         codclie : documento.codclie,
                         guardado : 0,
@@ -16,10 +16,10 @@
                       }
                       }"> 
                     {{ documento.Descrip }}<br><i class="bi bi-flag-fill"></i> - {{ documento.codigo }} - {{  documento.created_at }}
-                </router-link><span class="badge bg-primary rounded-pill">{{ filters.formatNum(documento.tot_monto) }}</span> 
+                </router-link><span :class="'badge bg-'+store.basecolor+' rounded-pill'">{{ filters.formatNum(documento.tot_monto) }}</span> 
               </li >
             <li v-for="docurec in documentosRec" :key="docurec.codigo" class="list-group-item d-flex justify-content-between align-items-center bg-light">
-              <router-link style="font-size: smaller; text-decoration: none;" :to="{name:'consultardocumento',params:{
+              <router-link style="font-size: smaller; text-decoration: none;color:black;" :to="{name:'consultardocumento',params:{
                         codigo : docurec.codigo,
                         codclie : docurec.codclie,
                         guardado : 0,
@@ -28,7 +28,7 @@
                       }
                       }"> 
                     {{ docurec.Descrip }}<br>{{ docurec.codigo }} - {{  docurec.created_at }}
-                </router-link> <span class="badge bg-primary rounded-pill">{{ filters.formatNum(docurec.tot_monto) }}</span> 
+                </router-link> <span :class="'badge bg-'+store.basecolor+' rounded-pill'">{{ filters.formatNum(docurec.tot_monto) }}</span> 
               </li >
             </ul >
       </div>
@@ -37,6 +37,8 @@
     
     <script setup>
         import { onMounted,ref } from 'vue';
+        import { useGlobalStore } from '@/store/global'; 
+        const store = useGlobalStore();
         const esonline = ref(false)
         const vendedor = ref('')
         const documentosEnv = ref([])
