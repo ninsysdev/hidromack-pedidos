@@ -44,7 +44,7 @@
 
     import UltimasFacturas from '@/components/UltimasFacturas.vue'
 
-    let version = ref("v 3.45");
+    let version = ref("v 3.50");
 
     const ultfact = ref([])
     let usuario = ref('')

@@ -1,11 +1,11 @@
 <template>
   <div class="container-fluid sticky-top p-2" style="top: 56px; background-color: whitesmoke;">
     <div class="input-group mb-2">
-      <div class="col-6" style="background-color:aqua;">
+      <div class="col-6 mt-2" style="background-color:darkturquoise;border-radius: 7%;">
         <h6 class="mt-1 mb-1 text-center" style="font-size: large;">LISTA GENERAL</h6>
       </div>
       <div class="col-6 mt-1 mb-1" style="text-align: right">
-        <CatalogoExcel :todos-productos="todosProductos" />
+        <CatalogoExcel :todos-productos="listaexcel" />
         <i style="color: white;">|</i>
         <CatalogoPDF :todos-productos="todosProductos" />
       </div>
@@ -49,6 +49,7 @@
     <div v-for="producto in productos" :key="producto.codprod" class="card mb-2">
       <div class="d-flex justify-content-between">
         <span class="discount">{{ parseFloat(producto.Precio) }} $</span>
+        <span v-if="producto.nuevo<=20" class="isnew">NUEVO</span>
         <button :class="'btn btn-'+store.basecolor" @click="editarPedido(producto)" data-bs-toggle="modal"
         data-bs-target="#ModalActivos"><i class="bi bi-cart-fill"></i></button>
       </div>
@@ -57,7 +58,7 @@
             <div v-for="(imagen,index) in producto.img" :key="index" class="carousel-inner">
               <div v-if="index == 0" class="carousel-item active" style="text-align: center;">
                 <div style="position:relative">
-                  <img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
+                  <img :src="'https://spxapp.com/spxapp.com/catalogohidromack/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
                   <div style="position:absolute; bottom:0; right:0; padding: 5%;">
                     <img border="0"  src="/img/users/logo2.png" width="150" height="80" />
                   </div>
@@ -65,7 +66,7 @@
               </div>
             <div v-else class="carousel-item" style="text-align: center;">
               <div style="position:relative">
-                  <img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
+                  <img :src="'https://spxapp.com/spxapp.com/catalogohidromack/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
                   <div style="position:absolute; bottom:0; right:0; padding: 5%;">
                     <img border="0"  src="/img/users/logo2.png" width="150" height="80" />
                   </div>
@@ -145,10 +146,12 @@ const cantidad = ref(null)
 const cantire = ref(0)
 const codvend = ref(null)
 const tipobus = ref(2)
+const listaexcel = ref([]);
 
 onMounted(() => {
   esonline.value = navigator.onLine
   todosProductos.value = JSON.parse(localStorage.getItem('spx_priceslist'));
+  crearlistaExcel();
   let datoslocales = JSON.parse(localStorage.getItem('spx_localdata'));
   codvend.value = datoslocales.spx_use_v;
   let pedidotemporal = JSON.parse(localStorage.getItem('spx_pedidotemp'));
@@ -258,6 +261,20 @@ function parametroBusqueda(tipo) {
   listaProductos(tipo);
 
 }
+
+const crearlistaExcel = () => {
+        todosProductos.value.forEach((item) => {
+            listaexcel.value.push({
+                Codigo: item.CodProd,
+                Descripcion: item.Descrip+' '+item.Descrip2+' '+item.Descrip3,
+                Referencia: item.Refere,
+                Marca: item.Marca,
+                Existencia: item.Exinten,
+                Unidad: item.Unidad,
+                Precio: item.Precio
+           });
+     });
+  };
 </script>
 
 <style scoped>
@@ -269,12 +286,22 @@ function parametroBusqueda(tipo) {
       padding-right: 4px;
       font-size: 24px;
       border-radius: 6px;
-      color: #fff;
+      color: black;
       }
       .old-price{
         font-size: 15px;
         text-align: center;
         font-weight: bold;
         color: grey;
+      }
+      .isnew{
+      background-color: blue;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      padding-left: 4px;
+      padding-right: 4px;
+      font-size: 24px;
+      border-radius: 6px;
+      color: #fff;
       }
 </style>

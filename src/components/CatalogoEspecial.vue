@@ -4,11 +4,11 @@
       <!-- div v-if="props.lista == 'Normal'" class="col-6" style="background-color:aqua;">
         <h6 class="mt-1 mb-1 text-center" style="font-size: large;">LISTA GENERAL</h6>
       </div -->
-      <div class="col-6 bg-success">
+      <div class="col-6 mt-2" style="background-color:limegreen;border-radius: 7%;">
         <h6 class="mt-1 mb-1 text-center" style="font-size: large;">LISTA LIQUIDACION</h6>
       </div>
       <div class="col-6 mt-1 mb-1" style="text-align: right">
-        <CatalogoExcel :todos-productos="todosProductos" />
+        <CatalogoExcel :todos-productos="listaexcel" />
         <i style="color: white;">|</i>
         <CatalogoPDF :todos-productos="todosProductos" />
       </div>
@@ -62,7 +62,7 @@
                 <!-- img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" alt="..." width="300" height="300">
                 <img src="/img/users/logo2.png" alt="..." width="268" hspace="16" height="268" vspace="16" -->
                 <div style="position:relative">
-                  <img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
+                  <img :src="'https://spxapp.com/spxapp.com/catalogohidromack/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
                   <div style="position:absolute; bottom:0; right:0; padding: 5%;">
                     <img border="0"  src="/img/users/logo2.png" width="150" height="80" />
                   </div>
@@ -70,7 +70,7 @@
               </div>
             <div v-else class="carousel-item" style="text-align: center;">
               <div style="position:relative">
-                  <img :src="'https://catalogohidromack.spxapp.com/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
+                  <img :src="'https://spxapp.com/spxapp.com/catalogohidromack/img/' + imagen.file" width="268" hspace="16" height="268" vspace="16" />
                   <div style="position:absolute; bottom:0; right:0; padding: 5%;">
                     <img border="0"  src="/img/users/logo2.png" width="150" height="80" />
                   </div>
@@ -137,24 +137,26 @@ import CatalogoExcel from './CatalogoExcel.vue';
 import { useGlobalStore } from '@/store/global'; 
 const store = useGlobalStore();
 
-const swal = inject('$swal')
+const swal = inject('$swal');
 
-const esonline = ref(false)
-const datoabuscar = ref('')
-const todosProductos = ref([])
-const productos = ref([])
-const datospedido = ref({})
-const tieneImagen = ref(false)
-const datosImagen = ref([])
-const pedidotemp = ref([])
-const cantidad = ref(null)
-const cantire = ref(0)
-const codvend = ref(null)
-const tipobus = ref(2)
+const esonline = ref(false);
+const datoabuscar = ref('');
+const todosProductos = ref([]);
+const productos = ref([]);
+const datospedido = ref({});
+const tieneImagen = ref(false);
+const datosImagen = ref([]);
+const pedidotemp = ref([]);
+const cantidad = ref(null);
+const cantire = ref(0);
+const codvend = ref(null);
+const tipobus = ref(2);
+const listaexcel = ref([]);
 
 onMounted(() => {
   esonline.value = navigator.onLine
   todosProductos.value = JSON.parse(localStorage.getItem('spx_speciallist'));
+  crearlistaExcel();
   let datoslocales = JSON.parse(localStorage.getItem('spx_localdata'));
   codvend.value = datoslocales.spx_use_v;
   let pedidotemporal = JSON.parse(localStorage.getItem('spx_pedido_esp'));
@@ -267,6 +269,20 @@ function parametroBusqueda(tipo) {
   listaProductos(tipo);
 
 }
+
+const crearlistaExcel = () => {
+        todosProductos.value.forEach((item) => {
+            listaexcel.value.push({
+                Codigo: item.CodProd,
+                Descripcion: item.Descrip+' '+item.Descrip2+' '+item.Descrip3,
+                Referencia: item.Refere,
+                Marca: item.Marca,
+                Existencia: item.Exinten,
+                Unidad: item.Unidad,
+                Precio: item.Precio
+           });
+     });
+  };
 </script>
 
 <style scoped>

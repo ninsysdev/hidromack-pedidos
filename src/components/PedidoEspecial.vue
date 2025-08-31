@@ -200,14 +200,14 @@
     })
 
     const totalizarpedido = ( async ()=>{
-        if(totalre.value < 300){
+        /* if(totalre.value < 300){
             swal({
                 icon: 'warning',
                 title: 'Pedido Incompleto',
                 text: 'El total del pedido debe ser mayor o igual a $300.00',
             })
             return
-        }
+        } */
         sincroniza.value = true
         await updateComentario()
 
